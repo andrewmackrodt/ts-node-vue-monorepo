@@ -1,0 +1,8 @@
+{
+  "watch": [
+    ".",
+    "../common"
+  ],
+  "ext": "ts",
+  "exec": "ts-node-dev ./index"
+}

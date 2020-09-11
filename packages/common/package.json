@@ -1,0 +1,24 @@
+{
+  "name": "@app/common",
+  "version": "0.0.0",
+  "description": "",
+  "homepage": "https://github.com/andrewmackrodt/ts-node-vue-monorepo",
+  "license": "UNLICENSED",
+  "author": {
+    "name": "Andrew Mackrodt",
+    "email": "andrewmackrodt@gmail.com",
+    "url": "https://github.com/andrewmackrodt"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/andrewmackrodt/ts-node-vue-monorepo.git"
+  },
+  "scripts": {
+    "lint": "eslint --ext .ts .",
+    "lint:fix": "eslint --ext .ts --fix .",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "base-x": "^3.0.8"
+  }
+}

@@ -1,0 +1,22 @@
+# exclude everything
+*
+
+# include common
+!packages/common/
+packages/common/node_modules/
+
+# include backend
+!packages/backend/
+packages/backend/node_modules/
+packages/backend/ts-node.json
+
+# include frontend
+!packages/frontend/
+packages/frontend/node_modules/
+
+# include root dependecies
+!lerna.json
+!package.json
+!pm2.json
+!postcss.config.js
+!yarn.lock

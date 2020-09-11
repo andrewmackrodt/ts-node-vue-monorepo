@@ -1,0 +1,7 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="localhost:8080" type="JavascriptDebugType" nameIsGenerated="true" uri="http://localhost:8080">
+    <mapping url="webpack://@app" local-file="$PROJECT_DIR$/packages" />
+    <mapping url="webpack://@app/node_modules" local-file="$PROJECT_DIR$/node_modules" />
+    <method v="2" />
+  </configuration>
+</component>
