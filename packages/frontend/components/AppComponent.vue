@@ -12,6 +12,7 @@
 
 <script lang="ts">
     import { Component, Vue } from 'vue-property-decorator'
+    import { server } from '../models/Server'
 
     // global styles
     import 'bootstrap/scss/bootstrap.scss'
@@ -31,8 +32,25 @@
         },
     })
     export default class AppComponent extends Vue {
+        private pingIntervalId?: number
+
         public get error(): any {
             return this.$store.state.error
+        }
+
+        public created() {
+            // establish web socket connection
+            server.ping()
+
+            // send ping event every 10s
+            this.pingIntervalId = setInterval(() => server.ping(), 10000)
+        }
+
+        public destroyed() {
+            if (typeof this.pingIntervalId !== 'undefined') {
+                clearInterval(this.pingIntervalId)
+                delete this.pingIntervalId
+            }
         }
     }
 </script>

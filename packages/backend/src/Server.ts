@@ -5,8 +5,10 @@ import bodyParser from 'body-parser'
 import compression from 'compression'
 import cors from 'cors'
 import express from 'express'
+import expressWs from 'express-ws'
 import fs from 'fs'
 import morgan from 'morgan'
+import WebSocket from 'ws'
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const cookieSession = require('cookie-session')
@@ -21,6 +23,7 @@ export interface ServerOptions {
     staticProxy?: string
     timeout?: number
     trustProxy?: boolean
+    ws?: boolean
 }
 
 export class Server {
@@ -29,6 +32,7 @@ export class Server {
     private readonly options: Required<ServerOptions>
     private readonly app: express.Application
     private readonly httpServer: HttpServer
+    private readonly wsServer?: WebSocket.Server
 
     public constructor(options?: ServerOptions) {
         this.options = {
@@ -41,11 +45,16 @@ export class Server {
             staticProxy: 'http://127.0.0.1:8080',
             timeout: 120000,
             trustProxy: true,
+            ws: false,
             ...options,
         }
 
         this.app = this.createApp()
         this.httpServer = this.createHttpServer()
+
+        if (this.options.ws) {
+            this.wsServer = this.createWsServer()
+        }
     }
 
     public start(): void {
@@ -113,6 +122,12 @@ export class Server {
             const index = fs.realpathSync(`${this.options.staticPath}/index.html`)
 
             app.use('*', (req, res, next) => {
+                const path = Object.values(req.params).join('/')
+
+                if (this.options.ws && path === '/.websocket') {
+                    return next()
+                }
+
                 res.sendFile(index)
             })
         } else {
@@ -125,14 +140,27 @@ export class Server {
                 ws: false,
             }))
         }
-
         return app
     }
 
     protected createHttpServer(): HttpServer {
         const server = createServer(this.app)
-        server.setTimeout(this.options.timeout)
+        server.setTimeout(120000)
 
         return server
+    }
+
+    protected createWsServer(): WebSocket.Server {
+        const instance = expressWs(this.app, this.httpServer)
+
+        instance.app.ws('/', (ws, req, next) => {
+            console.log('New connection on port %s.', this.getPort())
+
+            ws.on('close', () => {
+                console.log('Client has disconnected')
+            })
+        })
+
+        return instance.getWss()
     }
 }
