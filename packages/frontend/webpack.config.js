@@ -212,7 +212,7 @@ module.exports = {
       path.join(__dirname, '../../node_modules'),
     ],
     alias: {
-      vue$: 'vue/dist/vue.esm.js',
+      vue$: 'vue/dist/vue.esm-bundler.js',
     },
   },
   plugins: [

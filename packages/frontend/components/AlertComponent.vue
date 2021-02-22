@@ -5,9 +5,8 @@
 </template>
 
 <script lang="ts">
-    import { Component, Prop, Vue } from 'vue-property-decorator'
+    import { Prop, Vue } from 'vue-decorator'
 
-    @Component
     export default class AlertComponent extends Vue {
         @Prop({ default: 'danger' })
         public readonly level!: string

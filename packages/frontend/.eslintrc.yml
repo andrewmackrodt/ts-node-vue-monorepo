@@ -1,7 +1,7 @@
 parser: 'vue-eslint-parser'
 extends:
   - 'plugin:@typescript-eslint/recommended'
-  - 'plugin:vue/recommended'
+  - 'plugin:vue/vue3-recommended'
   - '../../.eslintrc.yml'
 parserOptions:
   ecmaVersion: 2018
@@ -21,6 +21,8 @@ rules:
   'vue/max-attributes-per-line':
     - off
   'vue/no-lone-template':
+    - off
+  'vue/no-multiple-template-root':
     - off
   'vue/no-v-html':
     - off

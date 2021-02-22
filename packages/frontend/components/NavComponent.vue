@@ -27,7 +27,7 @@
                 <ul class="navbar-nav">
                     <li v-for="item in menu" :class="['nav-item'].concat(item.items ? ['dropdown'] : [])">
                         <router-link v-if="!item.items" class="nav-link" :to="item.href">
-                            {{ item.name }}>
+                            {{ item.name }}
                         </router-link>
                         <span v-if="item.items"
                               class="nav-link dropdown-toggle"
@@ -52,9 +52,8 @@
 </template>
 
 <script lang="ts">
-    import { Component, Vue } from 'vue-property-decorator'
+    import { Vue } from 'vue-decorator'
 
-    @Component
     export default class NavComponent extends Vue {
         public created() {
             $(document).on('click', () => {
@@ -65,9 +64,10 @@
         public get menu(): object[] {
             return this.$router.options.routes!.reduce((routes, route) => {
                 if (route.meta?.showInNav) {
+                    const routeName = route.name as string
                     routes.push({
-                        name: route.meta?.title || route.name!,
-                        href: this.$router.resolve(route.name!).location,
+                        name: (route.meta?.title || routeName) as string,
+                        href: { name: routeName },
                     })
                 }
                 return routes

@@ -1,10 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import Vue from 'vue'
-import Vuex, { Store, StoreOptions } from 'vuex'
+import { createStore as createVuexStore, Store, StoreOptions } from 'vuex'
 import VuexPersistence from 'vuex-persist'
-
-Vue.use(Vuex)
 
 const vuexLocal = new VuexPersistence({
     storage: window.localStorage,
@@ -37,7 +34,9 @@ export function createStore<S extends any>(persistence = false): Store<S> {
         options.plugins!.push(vuexLocal.plugin)
     }
 
-    return new Vuex.Store(options)
+    return createVuexStore(options)
 }
+
+export const store = createStore(false)
 
 export const persistenceStore = createStore(true)

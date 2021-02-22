@@ -1,17 +1,15 @@
 <template>
-    <div id="app">
-        <nav-component />
-        <div class="container-fluid">
-            <div v-if="error">
-                <alert-component level="danger" :message="error" />
-            </div>
-            <router-view />
+    <nav-component />
+    <div class="container-fluid">
+        <div v-if="error">
+            <alert-component level="danger" :message="error" />
         </div>
+        <router-view />
     </div>
 </template>
 
 <script lang="ts">
-    import { Component, Vue } from 'vue-property-decorator'
+    import { Options, Vue } from 'vue-decorator'
     import { server } from '../models/Server'
 
     // global styles
@@ -25,7 +23,7 @@
     import AlertComponent from './AlertComponent.vue'
     import NavComponent from './NavComponent.vue'
 
-    @Component({
+    @Options({
         components: {
             AlertComponent,
             NavComponent,

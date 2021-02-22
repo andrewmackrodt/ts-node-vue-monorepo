@@ -1,17 +1,16 @@
-import { RouteConfig } from 'vue-router'
-
+import { RouteRecordRaw } from 'vue-router'
 import AlertComponent from './components/AlertComponent.vue'
 import HomePage from './pages/HomePage.vue'
 
-const routes: RouteConfig[] = [
+const routes: RouteRecordRaw[] = [
     {
         name: 'index',
-        path: '/(index)?',
+        path: '/:params(index)?',
         component: HomePage,
     },
     {
-        name: '404',
-        path: '*',
+        name: 'not-found',
+        path: '/:params(.*)*',
         component: AlertComponent,
         props: { message: 'Not Found', level: 'danger' },
     },
