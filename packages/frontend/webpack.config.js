@@ -61,14 +61,15 @@ module.exports = {
           appendTsxSuffixTo: [/\.vue$/],
         },
       },
+      // vue-loader must be specified before html-loader
+      {
+        test: /\.vue$/,
+        loader: 'vue-loader',
+      },
       {
         test: /\.html$/,
         loader: 'html-loader',
         exclude: /index\.html$/,
-      },
-      {
-        test: /\.vue$/,
-        loader: 'vue-loader',
       },
       {
         test: /\.s?css$/,
