@@ -1,12 +1,11 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
+const CssMinimizerPlugin = require('css-minimizer-webpack-plugin')
 const FaviconsWebpackPlugin = require('favicons-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const ImageminPlugin = require('imagemin-webpack-plugin').default
 const InjectPlugin = require('webpack-inject-plugin').default
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
-const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin')
-const ScriptExtHtmlWebpackPlugin = require('script-ext-html-webpack-plugin')
-const TerserJSPlugin = require('terser-webpack-plugin')
+const TerserPlugin = require('terser-webpack-plugin')
 const VueLoader = require('vue-loader')
 const path = require('path')
 const sharpResponsiveLoader = require('responsive-loader/sharp')
@@ -19,8 +18,8 @@ module.exports = {
   mode: isDev ? 'development' : 'production',
   optimization: {
     minimizer: [
-      new TerserJSPlugin({ cache: true, parallel: true }),
-      new OptimizeCSSAssetsPlugin(),
+      new TerserPlugin({ parallel: true }),
+      new CssMinimizerPlugin(),
     ],
     splitChunks: {
       chunks: 'all',
@@ -79,11 +78,17 @@ module.exports = {
             loader: MiniCssExtractPlugin.loader,
             options: {
               publicPath: '../',
-              hmr: isDev,
             },
           },
           'css-loader',
-          'postcss-loader',
+          {
+            loader: 'postcss-loader',
+            options: {
+              postcssOptions: {
+                plugins: ['autoprefixer'],
+              },
+            },
+          },
           'sass-loader',
         ],
       },
@@ -103,7 +108,14 @@ module.exports = {
                   },
                 },
               },
-              'postcss-loader',
+              {
+                loader: 'postcss-loader',
+                options: {
+                  postcssOptions: {
+                    plugins: ['autoprefixer'],
+                  },
+                },
+              },
               'sass-loader',
             ],
           },
@@ -114,7 +126,6 @@ module.exports = {
                 loader: MiniCssExtractPlugin.loader,
                 options: {
                   publicPath: '../',
-                  hmr: isDev,
                 },
               },
               {
@@ -126,7 +137,14 @@ module.exports = {
                   },
                 },
               },
-              'postcss-loader',
+              {
+                loader: 'postcss-loader',
+                options: {
+                  postcssOptions: {
+                    plugins: ['autoprefixer'],
+                  },
+                },
+              },
               'sass-loader',
             ],
           },
@@ -159,12 +177,15 @@ module.exports = {
       },
       {
         test: /\.svg(\?.*)?$/,
-        loader: 'svg-url-loader?noquotes'
-            + '&name=[path][name]' + ( ! isDev ? '.[hash:7]' : '') + '.[ext]'
-            + '&limit=20000'
-            + '&stripdeclarations'
-            + '&iesafe'
-            + '&esModule=false',
+        loader: 'svg-url-loader',
+        options: {
+          esModule: false,
+          iesafe: true,
+          limit: 20000,
+          name: '[path][name]' + ( ! isDev ? '.[hash:7]' : '') + '.[ext]',
+          noquotes: true,
+          stripdeclarations: true,
+        },
       },
       {
         test: /\.(gif|ico|eot|ttf|woff)(\?.*)?$/,
@@ -231,9 +252,6 @@ module.exports = {
     new MiniCssExtractPlugin({
       filename: 'bundles/[name]' + ( ! isDev ? '.[chunkhash:7]' : '') + '.css',
       chunkFilename: 'bundles/[name]' + ( ! isDev ? '.[chunkhash:7]' : '') + '.css',
-    }),
-    new ScriptExtHtmlWebpackPlugin({
-      defaultAttribute: 'defer',
     }),
     new VueLoader.VueLoaderPlugin(),
   ],

@@ -18,5 +18,4 @@ packages/frontend/node_modules/
 !lerna.json
 !package.json
 !pm2.json
-!postcss.config.js
 !yarn.lock
