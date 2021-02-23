@@ -9,7 +9,7 @@
 </template>
 
 <script lang="ts">
-    import { Options, Vue } from 'vue-decorator'
+    import { Options as Component, Vue } from 'vue-decorator'
     import { server } from '../models/Server'
 
     // global styles
@@ -23,7 +23,8 @@
     import AlertComponent from './AlertComponent.vue'
     import NavComponent from './NavComponent.vue'
 
-    @Options({
+    // @vue/component
+    @Component({
         components: {
             AlertComponent,
             NavComponent,
