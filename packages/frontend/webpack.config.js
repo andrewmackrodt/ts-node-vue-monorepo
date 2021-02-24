@@ -13,6 +13,19 @@ const webpack = require('webpack')
 
 const isDev = (process.env.npm_lifecycle_script || '').indexOf('development') !== -1
 
+// Temporary: force @vue/compiler-sfc to default to `pad: true` otherwise
+// generated source maps will have the wrong line numbering resulting in broken
+// debugger support, see issues:
+// - https://github.com/vuejs/vue-next/issues/3289
+// - https://github.com/vuejs/vue-loader/issues/1778
+{
+  const CompilerSfc = require('@vue/compiler-sfc')
+  const parse = CompilerSfc.parse
+  CompilerSfc.parse = (source, options) => {
+    return parse(source, Object.assign({ pad: true }, options))
+  }
+}
+
 module.exports = {
   entry: path.join(__dirname, 'index.ts'),
   mode: isDev ? 'development' : 'production',
@@ -258,7 +271,7 @@ module.exports = {
 }
 
 if (isDev) {
-  module.exports.devtool = 'eval-source-map'
+  module.exports.devtool = 'source-map'
 } else {
   module.exports.plugins.push(
       new ImageminPlugin({
