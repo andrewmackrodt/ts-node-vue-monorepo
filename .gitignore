@@ -9,6 +9,7 @@ vendor/
 .idea/workspace.xml
 .vagrant/
 .vscode/
+!.vscode/launch.json
 Thumbs.db
 *-error.log
 .DS_Store

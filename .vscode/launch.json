@@ -1,0 +1,16 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "vue.js: chrome",
+            "request": "launch",
+            "type": "chrome",
+            "url": "http://localhost:8080",
+            "webRoot": "${workspaceFolder}/packages/frontend",
+            "sourceMapPathOverrides": {
+                "webpack://@app/*": "${workspaceFolder}/packages/*",
+                "webpack://@app/node_modules/*": "${workspaceFolder}/node_modules/*"
+            }
+        }
+    ]
+}
