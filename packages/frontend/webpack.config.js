@@ -62,6 +62,33 @@ module.exports = {
     publicPath: '/',
     filename: 'bundles/[name]' + ( ! isDev ? '.[chunkhash:7]' : '') + '.js',
     chunkFilename: 'bundles/[name]' + ( ! isDev ? '.[chunkhash:7]' : '') + '.js',
+    devtoolModuleFilenameTemplate: info => {
+      if (info.allLoaders === '') {
+        // when allLoaders is an empty string the file is the original source
+        // file and will be prefixed with src:// to provide separation from
+        // modules transpiled via webpack
+        const filenameParts = ['src://']
+        if (info.namespace) {
+          filenameParts.push(info.namespace + '/')
+        }
+        filenameParts.push(info.resourcePath.replace(/^\.\//, ''))
+        return filenameParts.join('')
+      } else {
+        // otherwise we have a webpack module
+        const filenameParts = ['webpack://']
+        if (info.namespace) {
+          filenameParts.push(info.namespace + '/')
+        }
+        filenameParts.push(info.resourcePath.replace(/^\.\//, ''))
+        const isVueScript = info.resourcePath.match(/\.vue$/) &&
+            info.query.match(/\btype=script\b/) &&
+            ! info.allLoaders.match(/\bts-loader\b/)
+        if (! isVueScript) {
+          filenameParts.push('?' + info.hash)
+        }
+        return filenameParts.join('')
+      }
+    },
   },
   module: {
     rules: [
